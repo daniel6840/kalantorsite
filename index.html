@@ -586,11 +586,11 @@ a{text-decoration:none;color:inherit}ul{list-style:none}img{max-width:100%;displ
 <div class="form-wrap">
 <h3>בואו נבנה לכם שיווק שעובד באמת</h3>
 <p class="fs">שיחת ייעוץ ראשונית ללא עלות וללא התחייבות</p>
-<form class="lf" onsubmit="event.preventDefault();alert('הפרטים נשלחו! ניצור קשר בהקדם.')">
-<input type="text" placeholder="שם מלא" required>
-<input type="tel" placeholder="טלפון" required style="direction:rtl;text-align:right">
-<input type="email" placeholder="אימייל">
-<button type="submit" class="btn" style="animation:none">בואו נדבר ←</button>
+<form class="lf" id="leadForm" onsubmit="submitLead(event)">
+<input type="text" id="f_name" placeholder="שם מלא" required>
+<input type="tel" id="f_phone" placeholder="טלפון" required style="direction:rtl;text-align:right">
+<input type="email" id="f_email" placeholder="אימייל">
+<button type="submit" class="btn" style="animation:none" id="f_btn">בואו נדבר ←</button>
 </form>
 <div class="trust"><span><span class="ck">✔</span> ללא התחייבות</span><span><span class="ck">✔</span> התאמה אישית</span><span><span class="ck">✔</span> נבין אם מתאים</span></div>
 </div>
@@ -761,5 +761,7 @@ let bcIdx=0;
 function slideCarousel(d){const inner=document.getElementById('bcInner');if(!inner)return;const cards=inner.children.length;bcIdx=((bcIdx+d)%cards+cards)%cards;inner.style.transform='translateX('+bcIdx*100+'%)'}
 // Mobile dropdown toggle
 document.querySelector('.dd-trigger').addEventListener('click',function(e){if(window.innerWidth<=768){e.preventDefault();this.parentElement.querySelector('.dd-menu').classList.toggle('mob-open')}});
+// Lead form webhook
+async function submitLead(e){e.preventDefault();const btn=document.getElementById('f_btn');const name=document.getElementById('f_name').value;const phone=document.getElementById('f_phone').value;const email=document.getElementById('f_email').value;btn.textContent='שולח...';btn.disabled=true;try{await fetch('https://hook.eu1.make.com/x7gwaefm29gzw744rayttvkucpmuu65m',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,phone:phone,email:email,date:new Date().toISOString()})});document.getElementById('leadForm').innerHTML='<div style="text-align:center;padding:20px 0"><p style="font-size:20px;font-weight:700;color:var(--blue);margin-bottom:8px">הפרטים נשלחו בהצלחה!</p><p style="font-size:15px;color:var(--silver)">ניצור איתכם קשר בהקדם</p></div>'}catch(err){btn.textContent='בואו נדבר ←';btn.disabled=false;alert('שגיאה בשליחה, נסו שוב')}}
 </script>
 </body></html>
